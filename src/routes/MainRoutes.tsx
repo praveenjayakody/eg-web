@@ -6,7 +6,7 @@ import Loadable from "../layout/Loadable"
 // TODO: add AuthGuard
 // import AuthGuard from "@layout/AuthGuard/AuthGuard"
 
-const Auth = Loadable(lazyLoadWrapper(() => import("../pages/Auth/Auth")))
+const Login = Loadable(lazyLoadWrapper(() => import("../pages/Login/Login")))
 const SignUp = Loadable(lazyLoadWrapper(() => import("../pages/SignUp/SignUp")))
 
 const MainRoutes: RouteObject[] = [
@@ -14,8 +14,8 @@ const MainRoutes: RouteObject[] = [
     path: "/",
     children: [
       {
-        path: "/auth",
-        element: <Auth />
+        path: "/login",
+        element: <Login />
       },
       {
         path: "/sign-up",

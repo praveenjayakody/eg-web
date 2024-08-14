@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Grid,
-  Link,
   TextField,
   Typography
 } from "@mui/material"
@@ -12,6 +11,7 @@ import { ChangeEvent, FormEvent, useState } from "react"
 
 import { isValidEmail } from "../../lib/utils/isValidEmail"
 import { isStrongPassword } from "../../lib/utils/isStrongPassword"
+import { Link } from "react-router-dom"
 
 const SignUp: React.FC = () => {
   const initialFormData: {
@@ -139,9 +139,7 @@ const SignUp: React.FC = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
-              </Link>
+              <Link to="/login">Already have an account? Sign in</Link>
             </Grid>
           </Grid>
         </Box>
