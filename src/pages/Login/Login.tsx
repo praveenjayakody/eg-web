@@ -4,6 +4,7 @@ import {
   Button,
   Container,
   Grid,
+  Link as MuiLink,
   TextField,
   Typography
 } from "@mui/material"
@@ -29,7 +30,7 @@ const Login: React.FC = () => {
     }
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
   }
 
   const isFormDataInvalid = formData.email === "" || !formData.password
@@ -84,7 +85,11 @@ const Login: React.FC = () => {
           </Button>
           <Grid container>
             <Grid item>
-              <Link to="/signup">{"Don't have an account? Sign Up"}</Link>
+              <Link to="/signup">
+                <MuiLink component={"span"}>
+                  Don't have an account? Sign Up
+                </MuiLink>
+              </Link>
             </Grid>
           </Grid>
         </Box>

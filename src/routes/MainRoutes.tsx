@@ -2,9 +2,9 @@ import { RouteObject } from "react-router-dom"
 
 import lazyLoadWrapper from "../lib/utils/lazyLoadWrapper"
 import Loadable from "../layout/Loadable"
+import AuthGuard from "../layout/AuthGuard"
 
 // TODO: add AuthGuard
-// import AuthGuard from "@layout/AuthGuard/AuthGuard"
 
 const Login = Loadable(lazyLoadWrapper(() => import("../pages/Login/Login")))
 const SignUp = Loadable(lazyLoadWrapper(() => import("../pages/SignUp/SignUp")))
@@ -12,6 +12,7 @@ const SignUp = Loadable(lazyLoadWrapper(() => import("../pages/SignUp/SignUp")))
 const MainRoutes: RouteObject[] = [
   {
     path: "/",
+    element: <AuthGuard />,
     children: [
       {
         path: "/login",

@@ -5,6 +5,7 @@ import {
   Container,
   Grid,
   TextField,
+  Link as MuiLink,
   Typography
 } from "@mui/material"
 import { ChangeEvent, FormEvent, useState } from "react"
@@ -139,7 +140,11 @@ const SignUp: React.FC = () => {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link to="/login">Already have an account? Sign in</Link>
+              <Link to="/login">
+                <MuiLink component={"span"}>
+                  Already have an account? Sign in
+                </MuiLink>
+              </Link>
             </Grid>
           </Grid>
         </Box>
