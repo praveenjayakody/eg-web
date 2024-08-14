@@ -7,10 +7,32 @@ import {
   TextField,
   Typography
 } from "@mui/material"
+import { ChangeEvent, FormEvent, useState } from "react"
 import { Link } from "react-router-dom"
 
 const Login: React.FC = () => {
-  const handleSubmit = () => {}
+  const initialFormData: {
+    email: string
+    password: string
+  } = {
+    email: "",
+    password: ""
+  }
+  const [formData, setFormData] = useState(initialFormData)
+  const handleFormChange =
+    (field: keyof typeof initialFormData) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setFormData(currentFormData => ({
+        ...currentFormData,
+        [field]: event.target.value
+      }))
+    }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+  }
+
+  const isFormDataInvalid = formData.email === "" || !formData.password
 
   return (
     <Container component="main" maxWidth="xs">
@@ -36,6 +58,8 @@ const Login: React.FC = () => {
             name="email"
             autoComplete="email"
             autoFocus
+            value={formData.email}
+            onChange={handleFormChange("email")}
           />
           <TextField
             margin="normal"
@@ -46,12 +70,15 @@ const Login: React.FC = () => {
             type="password"
             id="password"
             autoComplete="current-password"
+            value={formData.password}
+            onChange={handleFormChange("password")}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isFormDataInvalid}
           >
             Sign In
           </Button>
