@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
 // INFO: interceptor to store access auth and cms token
 axiosInstance.interceptors.response.use(response => {
   if (response.data.access_token) {
-    localStorage.set(StorageKeys.ACCESS_TOKEN, response.data.access_token)
+    localStorage.setItem(StorageKeys.ACCESS_TOKEN, response.data.access_token)
   }
   return response
 })

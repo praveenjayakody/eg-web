@@ -3,3 +3,8 @@ export interface RegisterApiReq {
   newPassword: string
   fullname: string
 }
+
+export interface LoginApiReq {
+  email: string
+  password: string
+}

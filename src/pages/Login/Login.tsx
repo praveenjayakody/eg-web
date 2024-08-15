@@ -1,7 +1,9 @@
 import {
+  Alert,
   Avatar,
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   Link as MuiLink,
@@ -10,6 +12,9 @@ import {
 } from "@mui/material"
 import { ChangeEvent, FormEvent, useState } from "react"
 import { Link } from "react-router-dom"
+
+import { LoginApiReq } from "../../lib/models"
+import { useApiMutation } from "../../lib/query"
 
 const Login: React.FC = () => {
   const initialFormData: {
@@ -29,8 +34,18 @@ const Login: React.FC = () => {
       }))
     }
 
+  const { isPending, mutate, isError, error } = useApiMutation<
+    unknown,
+    LoginApiReq
+  >("auth/login", "post", {
+    onSuccess: data => {
+      console.log(data)
+    }
+  })
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    mutate(formData)
   }
 
   const isFormDataInvalid = formData.email === "" || !formData.password
@@ -74,12 +89,18 @@ const Login: React.FC = () => {
             value={formData.password}
             onChange={handleFormChange("password")}
           />
+          {isPending && <CircularProgress sx={{ mt: 3 }} size={24} />}
+          {isError && (
+            <Alert severity="warning" sx={{ mt: 3 }}>
+              {error.message}
+            </Alert>
+          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
-            disabled={isFormDataInvalid}
+            disabled={isFormDataInvalid || isPending}
           >
             Sign In
           </Button>
