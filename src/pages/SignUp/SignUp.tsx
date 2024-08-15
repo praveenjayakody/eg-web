@@ -6,13 +6,17 @@ import {
   Grid,
   TextField,
   Link as MuiLink,
-  Typography
+  Typography,
+  CircularProgress,
+  Alert
 } from "@mui/material"
 import { ChangeEvent, FormEvent, useState } from "react"
 
 import { isValidEmail } from "../../lib/utils/isValidEmail"
 import { isStrongPassword } from "../../lib/utils/isStrongPassword"
 import { Link } from "react-router-dom"
+import { useApiMutation } from "../../lib/query"
+import { RegisterApiReq } from "../../lib/models"
 
 const SignUp: React.FC = () => {
   const initialFormData: {
@@ -36,16 +40,30 @@ const SignUp: React.FC = () => {
 
   // INFO: errors are shown only if user has tried to submit the form at least once only
   const [errorsShown, setErrorsShown] = useState(false)
-  const isInvalidFullName = formData.fullName === ""
-  const isInvalidEmail = formData.email === "" || !isValidEmail(formData.email)
+  const isInvalidFullName = formData.fullName.trim() === ""
+  const isInvalidEmail =
+    formData.email.trim() === "" || !isValidEmail(formData.email)
   const isInvalidPassword =
     formData.password === "" || !isStrongPassword(formData.password)
+
+  const { isPending, mutate, isError, error, isSuccess } = useApiMutation<
+    unknown,
+    RegisterApiReq
+  >("register/email", "post", {
+    onSuccess: data => {
+      console.log(data)
+    }
+  })
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setErrorsShown(true)
     if (!isInvalidFullName && !isInvalidEmail && !isInvalidPassword) {
-      console.log(formData)
+      mutate({
+        email: formData.email.trim().toLowerCase(),
+        newPassword: formData.password,
+        fullname: formData.fullName.trim()
+      })
     }
   }
 
@@ -130,11 +148,23 @@ const SignUp: React.FC = () => {
               />
             </Grid>
           </Grid>
+          {isPending && <CircularProgress sx={{ mt: 3 }} size={24} />}
+          {isError && (
+            <Alert severity="warning" sx={{ mt: 3 }}>
+              {error.message}
+            </Alert>
+          )}
+          {isSuccess && (
+            <Alert severity="success" sx={{ mt: 3 }}>
+              Registration successful! Please sign in
+            </Alert>
+          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={isPending || isSuccess}
           >
             Sign Up
           </Button>
