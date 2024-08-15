@@ -1,3 +1,5 @@
+import { ApiUser } from "./user.types"
+
 export interface RegisterApiReq {
   email: string
   newPassword: string
@@ -7,4 +9,9 @@ export interface RegisterApiReq {
 export interface LoginApiReq {
   email: string
   password: string
+}
+
+export interface LoginApiRes {
+  user: ApiUser
+  access_token: string
 }

@@ -11,12 +11,17 @@ import {
   Typography
 } from "@mui/material"
 import { ChangeEvent, FormEvent, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
-import { LoginApiReq } from "../../lib/models"
+import { LoginApiReq, LoginApiRes } from "../../lib/models"
 import { useApiMutation } from "../../lib/query"
+import { useUserStore } from "../../stores/user.store"
 
 const Login: React.FC = () => {
+  const { setUser } = useUserStore()
+
+  const navigate = useNavigate()
+
   const initialFormData: {
     email: string
     password: string
@@ -35,11 +40,13 @@ const Login: React.FC = () => {
     }
 
   const { isPending, mutate, isError, error } = useApiMutation<
-    unknown,
+    LoginApiRes,
     LoginApiReq
   >("auth/login", "post", {
     onSuccess: data => {
       console.log(data)
+      setUser(data.user)
+      navigate("/")
     }
   })
 

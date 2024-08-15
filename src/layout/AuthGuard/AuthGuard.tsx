@@ -11,7 +11,7 @@ const AuthGuard: React.FC = () => {
   const { user, setUser } = useUserStore()
 
   const { isLoading, isError, data } = useApiQuery<ApiUser>(
-    ["user"],
+    ["user", user?.email],
     "/auth/iam",
     () => ({}),
     {
