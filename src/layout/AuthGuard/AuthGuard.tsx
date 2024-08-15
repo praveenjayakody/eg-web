@@ -1,43 +1,39 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
+import React, { useEffect } from "react"
+import { Outlet, useNavigate } from "react-router-dom"
+import { CircularProgress } from "@mui/material"
 
-// import { useApiQuery } from "@query"
-// import { useUserStore } from "@stores/user.store"
+import { useApiQuery } from "../../lib/query"
+import { ApiUser } from "../../lib/models"
+import { useUserStore } from "../../stores/user.store"
 
 const AuthGuard: React.FC = () => {
-  // const { user, setUser } = useUserStore()
+  const navigate = useNavigate()
+  const { user, setUser } = useUserStore()
 
-  // const { isLoading, isError } = useApiQuery<iUser>(
-  //   ["user"],
-  //   "/auth/iam",
-  //   () => ({}),
-  //   {
-  //     enabled: !user,
-  //     retry: false,
-  //     onSuccess: data => {
-  //       // todo: work around for stg
-  //       if (data?.id) {
-  //         setUser(data)
-  //       } else {
-  //         navigate("/auth" + location.search)
-  //       }
-  //     },
-  //     onError: () => {
-  //       navigate("/auth" + location.search)
-  //     }
-  //   }
-  // )
+  const { isLoading, isError, data } = useApiQuery<ApiUser>(
+    ["user"],
+    "/auth/iam",
+    () => ({}),
+    {
+      enabled: !user,
+      retry: false
+    }
+  )
 
-  const isLoading = false
-  const isError = false
+  useEffect(() => {
+    if (data) {
+      setUser(data)
+    }
+  }, [data, setUser])
+
+  useEffect(() => {
+    if (isError) {
+      navigate("/login" + location.search)
+    }
+  }, [isError, navigate])
 
   if (isLoading) {
-    return <p>Loading</p>
-  }
-
-  // TODO: update error message and ui for error in this stage
-  if (isError) {
-    return <div>Error fetching user data</div>
+    return <CircularProgress />
   }
 
   return (
